@@ -2,7 +2,6 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
-  HttpException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { MongoError } from 'mongoose/node_modules/mongodb';
