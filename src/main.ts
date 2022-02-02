@@ -6,8 +6,18 @@ import { MongooseExceptionFilter } from './filters/mongoose-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new MongoExceptionFilter(), new MongooseExceptionFilter());
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
+  app.useGlobalFilters(
+    new MongoExceptionFilter(),
+    new MongooseExceptionFilter(),
+  );
+
   await app.listen(3000);
 }
 bootstrap();
