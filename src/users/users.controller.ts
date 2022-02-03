@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,9 +19,9 @@ export class UsersController {
     private readonly usersService: UsersService,
   ) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return await this.usersService.create(createUserDto);
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 
   @Get()
