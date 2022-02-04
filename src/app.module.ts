@@ -8,13 +8,15 @@ import configuration from './config/configuration';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
     MongooseModule.forRoot(configuration().database.uri),
     UsersModule,
-    AuthModule
+    AuthModule,
+    TasksModule
   ],
   controllers: [AppController],
   providers: [AppService, {
