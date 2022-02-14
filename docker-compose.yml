@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    container_name: mongo
+    environment:
+      MONGO_INITDB_DATABASE: tasks
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: s3cr3t
+    volumes:
+      - db-data:/data/db
+    ports:
+      - 27017:27017
+
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: tasks/api:latest
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+    container_name: api
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    ports:
+      - 3000:3000
+    volumes: 
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  db-data: ~
