@@ -5,8 +5,6 @@ import {
   MaxLength,
   MinLength,
   IsOptional,
-  MinDate,
-  IsDate,
 } from 'class-validator';
 
 export class CreateTaskDto {

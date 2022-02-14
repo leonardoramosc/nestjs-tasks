@@ -10,11 +10,19 @@ export class ValidateDeadline implements PipeTransform {
     const { deadline } = task;
     const now = momenttz.tz(TIMEZONE);
 
-    const deadlineMoment = this.convertDeadline(deadline);
+    const deadlineMoment = momenttz.tz(deadline, TIMEZONE);
+
+    if (!deadlineMoment.isValid()) {
+      throw new BadRequestException('Invalid Deadline format');
+    }
 
     if (deadlineMoment.isBefore(now)) {
       throw new BadRequestException('Deadline cannot be before current datetime');
     }
+
+    const newDeadline = this.convertDeadline(deadline).toISOString(true);
+
+    task.deadline = newDeadline;
 
     return task;
   }
@@ -30,13 +38,13 @@ export class ValidateDeadline implements PipeTransform {
    * @returns Moment
    */
   convertDeadline(deadline: string) {
-    let deadlineMoment = momenttz(deadline, TIMEZONE);
+    let deadlineMoment = momenttz.tz(deadline, TIMEZONE);
     const utcOffset = deadlineMoment.utcOffset();
 
     if (utcOffset < 0) {
-      deadlineMoment = deadlineMoment.subtract(utcOffset, 'minutes')
+      deadlineMoment = deadlineMoment.add(utcOffset, 'minutes')
     } else {
-      deadlineMoment = deadlineMoment.add(utcOffset, 'minutes');
+      deadlineMoment = deadlineMoment.subtract(utcOffset, 'minutes');
     }
 
     return deadlineMoment;

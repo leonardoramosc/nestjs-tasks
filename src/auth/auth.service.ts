@@ -34,7 +34,7 @@ export class AuthService {
     const user = await this.userService.create(createUserDto);
     return {
       user,
-      access_token: this.jwtService.sign(user)
+      access_token: this.jwtService.sign(user.toJSON())
     }
   }
 }
